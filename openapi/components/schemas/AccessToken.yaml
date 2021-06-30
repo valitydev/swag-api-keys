@@ -1,0 +1,11 @@
+type: object
+required:
+  - accessToken
+properties:
+  accessToken:
+    description: Токен доступа, ассоциированный с данным ключом
+    type: string
+    minLength: 1
+    maxLength: 4000
+    example: |
+      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0a2kiOiIxS2dJWUJHc0NncSIsImlhdCI6MTUxNjIzOTAyMn0.6YsaZQC9A7BjxXHwRbJfUO6VujOb4rHTKrqmMt64TbQ

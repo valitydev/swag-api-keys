@@ -1,0 +1,10 @@
+name: orgId
+in: path
+description: Идентификатор организации
+required: true
+schema:
+  description: Идентификатор организации
+  type: string
+  minLength: 1
+  maxLength: 40
+  example: bdaf9e76-1c5b-4798-b154-19b87a61dc94

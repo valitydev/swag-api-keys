@@ -1,0 +1,6 @@
+description: Идентификатор ключа
+type: string
+minLength: 1
+maxLength: 40
+example: 1KgIYBGsCgq
+readOnly: true

@@ -1,0 +1,36 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: RBKmoney API Keys Management API
+  description:
+    $ref: './docs/api.md'
+  termsOfService: 'https://rbk.money/'
+  contact:
+    name: RBKmoney Support Team
+    email: support@rbk.money
+    url: 'https://developer.rbk.money'
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+security:
+  - bearer: []
+tags:
+  - name: apiKeys
+    x-displayName: API-ключи
+  - name: errorCodes
+    x-displayName: Коды ошибок
+    description:
+      $ref: './docs/errors.md'
+paths:
+  /orgs/{orgId}/api-keys:
+    $ref: ./paths/apiKeys.yaml
+  /orgs/{orgId}/api-keys/{apiKeyId}:
+    $ref: ./paths/apiKey.yaml
+  /orgs/{orgId}/api-keys/{apiKeyId}/status:
+    $ref: ./paths/apiKeyStatus.yaml
+servers:
+  - url: 'https://api.rbk.money/apikey/v1'
+components:
+  securitySchemes:
+    bearer:
+      $ref: './components/security-schemes/Bearer.yaml'

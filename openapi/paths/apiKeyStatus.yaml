@@ -1,0 +1,24 @@
+put:
+  summary: Отозвать ключ
+  operationId: revokeApiKey
+  tags:
+    - apiKeys
+  parameters:
+    - $ref: '../components/parameters/orgId.yaml'
+    - $ref: '../components/parameters/apiKeyId.yaml'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: string
+          enum:
+            - Revoked
+  responses:
+    '204':
+      description: Ключ отозван
+    '404':
+      description: Ключ не найден
+    '403':
+      description: Операция недоступна
+    '400':
+      $ref: '../components/responses/BadRequest.yaml'

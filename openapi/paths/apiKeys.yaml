@@ -1,0 +1,62 @@
+get:
+  summary: Перечислить ключи организации
+  operationId: listApiKeys
+  tags:
+    - apiKeys
+  parameters:
+    - $ref: '../components/parameters/orgId.yaml'
+    - name: status
+      description: |
+        Фильтр по статусу ключа. По умолчанию `active`.
+      in: query
+      required: false
+      schema:
+        $ref: '../components/schemas/ApiKeyStatus.yaml'
+  responses:
+    '200':
+      description: Ключи найдены
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - results
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '../components/schemas/ApiKey.yaml'
+    '404':
+      description: Организация не найдена
+    '403':
+      description: Операция недоступна
+    '400':
+      $ref: '../components/responses/BadRequest.yaml'
+
+post:
+  summary: Выпустить новый ключ
+  operationId: issueApiKey
+  tags:
+    - apiKeys
+  parameters:
+    - $ref: '../components/parameters/orgId.yaml'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas/ApiKey.yaml'
+  responses:
+    '200':
+      description: Ключ выпущен
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '../components/schemas/ApiKey.yaml'
+              - $ref: '../components/schemas/AccessToken.yaml'
+    '404':
+      description: Организация не найдена
+    '403':
+      description: Операция недоступна
+    '400':
+      $ref: '../components/responses/BadRequest.yaml'

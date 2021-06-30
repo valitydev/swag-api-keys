@@ -1,0 +1,6 @@
+description: Статус ключа
+type: string
+enum:
+  - Active
+  - Revoked
+readOnly: true

@@ -1,0 +1,28 @@
+description: Ключ для авторизации запросов к API
+type: object
+required:
+  - id
+  - createdAt
+  - name
+  - status
+properties:
+  id:
+    $ref: './ApiKeyID.yaml'
+  createdAt:
+    description: Дата и время создания
+    type: string
+    format: date-time
+    readOnly: true
+  name:
+    description: Запоминающееся название ключа
+    type: string
+    minLength: 1
+    maxLength: 40
+    example: live-site-integration
+  status:
+    $ref: './ApiKeyStatus.yaml'
+  metadata:
+    description: |
+      Произвольный набор данных, специфичный для клиента API и
+      непрозрачный для системы
+    type: object

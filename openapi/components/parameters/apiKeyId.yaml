@@ -1,0 +1,6 @@
+name: apiKeyId
+in: path
+description: Идентификатор ключа
+required: true
+schema:
+  $ref: '../schemas/ApiKeyID.yaml'
