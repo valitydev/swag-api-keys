@@ -6,7 +6,7 @@
     "redoc-cli": "^0.9.8",
     "json-merge-patch": "^0.2.3",
     "json-pointer": "^0.6.0",
-    "shelljs": "^0.7.0",
+    "shelljs": "^0.8.5",
     "swagger-ui-dist": "^3.18.3"
   },
   "private": true,
