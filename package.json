@@ -1,5 +1,5 @@
 {
-  "name": "rbkmoney-organisations-api",
+  "name": "@vality/swag-api-keys",
   "version": "1.0.0",
   "dependencies": {
     "@redocly/openapi-cli": "^0.12.7",
