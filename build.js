@@ -12,14 +12,15 @@ set('-e');
 
 mkdir('-p', TARGET_DIR)
 
-cp('-R', 'web/*', TARGET_DIR + '/');
+// cp('-R', 'web/*', TARGET_DIR + '/');
 
-exec('npm run openapi bundle -- -o ' + TARGET_DIR + ' --ext json');
-exec('npm run openapi bundle -- -o ' + TARGET_DIR + ' --ext yaml');
+exec('npm run openapi bundle -- -o ' + Path.join(TARGET_DIR, 'openapi') + ' --ext json');
+exec('npm run openapi bundle -- -o ' + Path.join(TARGET_DIR, 'openapi') + ' --ext yaml');
 
 exec([
-    'npm run redoc bundle --',
+    'npm run openapi build-docs --',
     '--cdn',
+    '--template web/template.hbs',
     '-o', Path.join(TARGET_DIR, 'index.html'),
     Path.join(TARGET_DIR, 'openapi.yaml')
 ].join(' '));

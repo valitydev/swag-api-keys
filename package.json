@@ -2,19 +2,17 @@
   "name": "@vality/swag-api-keys",
   "version": "1.0.0",
   "dependencies": {
-    "@redocly/openapi-cli": "^0.12.7",
-    "redoc-cli": "^0.9.8",
-    "json-merge-patch": "^0.2.3",
+    "@redocly/cli": "^1.0.0-beta.110",
+    "json-merge-patch": "^1.0.0",
     "json-pointer": "^0.6.0",
-    "shelljs": "^0.7.0",
+    "shelljs": "^0.8.0",
     "swagger-ui-dist": "^3.18.3"
   },
   "private": true,
   "scripts": {
     "start": "openapi preview-docs",
     "build": "node ./build.js",
-    "validate": "openapi validate",
-    "openapi": "openapi",
-    "redoc": "redoc-cli"
+    "validate": "openapi lint",
+    "openapi": "openapi"
   }
 }
