@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Cache Node Modules and NPM Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Install deps
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Bundle spec and build docsite
+        run: npm run build -- dist
+
+      - name: Prepare release artifacts
+        run: mkdir -p out && cp dist/openapi.{yaml,json} package.json package-lock.json out/
+
+      - name: Deploy artifacts to release branch
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: release/master
+          folder: out
+          commit-message: Release ${{ github.repository }}@${{ github.sha }}

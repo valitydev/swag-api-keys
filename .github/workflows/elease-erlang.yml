@@ -1,0 +1,82 @@
+name: Release Erlang libraries
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  SWAGGER_CODEGEN_VERSION: "3.0.35"
+  SWAGGER_GENERATOR_VERSION: "oas_1.0.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Create directories
+        shell: bash
+        run: |
+          sudo mkdir -p /usr/local/lib/swagger-codegen
+          sudo chown $(whoami) /usr/local/lib/swagger-codegen
+
+      - name: Download swagger-codegen
+        shell: bash
+        run: |
+          wget --no-verbose https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/${{ env.SWAGGER_CODEGEN_VERSION }}/swagger-codegen-cli-${{ env.SWAGGER_CODEGEN_VERSION }}.jar -O /usr/local/lib/swagger-codegen/swagger-codegen-cli.jar
+
+      - name: Download swagger-generator-erlang
+        shell: bash
+        run: |
+          wget --no-verbose https://github.com/valitydev/swagger-generator-erlang/releases/download/${{ env.SWAGGER_GENERATOR_VERSION }}/swagger-generator-erlang-${{ env.SWAGGER_GENERATOR_VERSION }}.jar -O /usr/local/lib/swagger-codegen/swagger-generator-erlang.jar
+
+      - name: Make swagger-codegen shortcut
+        shell: bash
+        run: |
+          echo "#!/bin/sh" > /usr/local/bin/swagger-codegen
+          echo "java -cp /usr/local/lib/swagger-codegen/swagger-generator-erlang.jar:/usr/local/lib/swagger-codegen/swagger-codegen-cli.jar io.swagger.codegen.v3.cli.SwaggerCodegen \$*" >> /usr/local/bin/swagger-codegen
+          chmod +x /usr/local/bin/swagger-codegen
+
+      - name: Cache Node Modules and NPM Cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Install deps
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Bundle spec and build docsite
+        run: npm run build -- dist
+
+      - name: Generate stubs
+        run: |
+          mkdir -p out
+          swagger-codegen generate -l vality-erlang-client -i dist/openapi.json -o out/erlang-client --additional-properties packageName=oas_client
+          swagger-codegen generate -l vality-erlang-server -i dist/openapi.json -o out/erlang-server --additional-properties packageName=oas_server
+
+      - name: Deploy erlang-client artifact to release branch
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: release/erlang/client/master
+          folder: out/erlang-client
+          commit-message: Release ${{ github.repository }}@${{ github.sha }}
+
+      - name: Deploy erlang-server artifact to release branch
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          branch: release/erlang/server/master
+          folder: out/erlang-server
+          commit-message: Release ${{ github.repository }}@${{ github.sha }}
