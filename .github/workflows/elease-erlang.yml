@@ -7,7 +7,7 @@ on:
 
 env:
   SWAGGER_CODEGEN_VERSION: "3.0.35"
-  SWAGGER_GENERATOR_VERSION: "oas_1.0.0"
+  SWAGGER_GENERATOR_VERSION: "oas_v1.0.0"
 
 jobs:
   build:
