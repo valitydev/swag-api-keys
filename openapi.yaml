@@ -1,0 +1,285 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Vality API Keys Management API
+  description: |
+    Vality API Keys Management API является интерфейсом для управления набором
+    API-ключей, используемых для авторизации запросов к основному API с ваших
+    бэкенд-сервисов. Любые сторонние приложения, включая ваш личный кабинет,
+    являются внешними приложениями-клиентами данного API.
+
+    Мы предоставляем REST API поверх HTTP-протокола, схема которого описывается в
+    соответствии со стандартом [OpenAPI 3][OAS3].
+    Коды возврата описываются соответствующими HTTP-статусами. Платформа принимает и
+    возвращает значения JSON в теле запросов и ответов.
+
+    [OAS3]: https://swagger.io/specification/
+
+    ## Формат содержимого
+
+    Любой запрос к API должен выполняться в кодировке UTF-8 и с указанием
+    содержимого в формате JSON.
+
+    ```
+    Content-Type: application/json; charset=utf-8
+    ```
+  termsOfService: https://vality.dev/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+security:
+  - bearer: []
+tags:
+  - name: apiKeys
+    x-displayName: API-ключи
+  - name: errorCodes
+    x-displayName: Коды ошибок
+    description: |
+      ## Общие ошибки
+
+      Ошибки возникающие при попытках совершения недопустимых операций, операций с невалидными объектами или несуществующими ресурсами. Имеют следующий вид:
+
+      ```json
+      {
+          "code": "string",
+          "message": "string"
+      }
+      ```
+
+      В поле `message` содержится информация по произошедшей ошибке. Например:
+
+      ```json
+      {
+          "code": "invalidRequest",
+          "message": "Property 'name' is required."
+      }
+      ```
+
+      ## Ошибки обработки запросов
+
+      В процессе обработки запросов силами нашей платформы могут происходить различные непредвиденные ситуации. Об их появлении платформа сигнализирует по протоколу HTTP соответствующими [статусами][5xx], обозначающими ошибки сервера.
+
+      |  Код    |  Описание  |
+      | ------- | ---------- |
+      | **500** | В процессе обработки платформой запроса возникла непредвиденная ситуация. При получении подобного кода ответа мы рекомендуем обратиться в техническую поддержку. |
+      | **503** | Платформа временно недоступна и не готова обслуживать данный запрос. Запрос гарантированно не выполнен, при получении подобного кода ответа попробуйте выполнить его позднее, когда доступность платформы будет восстановлена. |
+      | **504** | Платформа превысила допустимое время обработки запроса, результат запроса не определён. Попробуйте отправить запрос повторно или выяснить результат выполнения исходного запроса, если повторное исполнение запроса нежелательно. |
+
+      [5xx]: https://tools.ietf.org/html/rfc7231#section-6.6
+
+
+      Если вы получили ошибку, которой нет в данном описании, обратитесь в техническую поддержку.
+paths:
+  /orgs/{orgId}/api-keys:
+    get:
+      summary: Перечислить ключи организации
+      operationId: listApiKeys
+      tags:
+        - apiKeys
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - name: status
+          description: |
+            Фильтр по статусу ключа. По умолчанию `active`.
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ApiKeyStatus'
+      responses:
+        '200':
+          description: Ключи найдены
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - results
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApiKey'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Операция недоступна
+        '404':
+          description: Организация не найдена
+    post:
+      summary: Выпустить новый ключ
+      operationId: issueApiKey
+      tags:
+        - apiKeys
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+      responses:
+        '200':
+          description: Ключ выпущен
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiKey'
+                  - $ref: '#/components/schemas/AccessToken'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Операция недоступна
+        '404':
+          description: Организация не найдена
+  /orgs/{orgId}/api-keys/{apiKeyId}:
+    get:
+      summary: Получить данные ключа
+      operationId: getApiKey
+      tags:
+        - apiKeys
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/apiKeyId'
+      responses:
+        '200':
+          description: Ключ найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Операция недоступна
+        '404':
+          description: Ключ не найден
+  /orgs/{orgId}/api-keys/{apiKeyId}/status:
+    put:
+      summary: Отозвать ключ
+      operationId: revokeApiKey
+      tags:
+        - apiKeys
+      parameters:
+        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/apiKeyId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              enum:
+                - Revoked
+      responses:
+        '204':
+          description: Ключ отозван
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Операция недоступна
+        '404':
+          description: Ключ не найден
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Для аутентификации вызовов мы используем [JWT](https://jwt.io). Токен доступа передается в заголовке.
+        ```shell
+         Authorization: Bearer {JWT}
+        ```
+        Запросы к данному API авторизуются сессионным токеном доступа, который вы получаете в результате аутентификации в личном кабинете.
+  parameters:
+    orgId:
+      name: orgId
+      in: path
+      description: Идентификатор организации
+      required: true
+      schema:
+        description: Идентификатор организации
+        type: string
+        minLength: 1
+        maxLength: 40
+        example: bdaf9e76-1c5b-4798-b154-19b87a61dc94
+    apiKeyId:
+      name: apiKeyId
+      in: path
+      description: Идентификатор ключа
+      required: true
+      schema:
+        $ref: '#/components/schemas/ApiKeyID'
+  schemas:
+    ApiKeyStatus:
+      description: Статус ключа
+      type: string
+      enum:
+        - Active
+        - Revoked
+      readOnly: true
+    ApiKeyID:
+      description: Идентификатор ключа
+      type: string
+      minLength: 1
+      maxLength: 40
+      example: 1KgIYBGsCgq
+      readOnly: true
+    ApiKey:
+      description: Ключ для авторизации запросов к API
+      type: object
+      required:
+        - id
+        - createdAt
+        - name
+        - status
+      properties:
+        id:
+          $ref: '#/components/schemas/ApiKeyID'
+        createdAt:
+          description: Дата и время создания
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          description: Запоминающееся название ключа
+          type: string
+          minLength: 1
+          maxLength: 40
+          example: live-site-integration
+        status:
+          $ref: '#/components/schemas/ApiKeyStatus'
+        metadata:
+          description: |
+            Произвольный набор данных, специфичный для клиента API и
+            непрозрачный для системы
+          type: object
+    AccessToken:
+      type: object
+      required:
+        - accessToken
+      properties:
+        accessToken:
+          description: Токен доступа, ассоциированный с данным ключом
+          type: string
+          minLength: 1
+          maxLength: 4000
+          example: |
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0a2kiOiIxS2dJWUJHc0NncSIsImlhdCI6MTUxNjIzOTAyMn0.6YsaZQC9A7BjxXHwRbJfUO6VujOb4rHTKrqmMt64TbQ
+  responses:
+    BadRequest:
+      description: Переданы ошибочные данные
+      content:
+        application/json:
+          schema:
+            description: Ошибка в переданных данных
+            type: object
+            required:
+              - code
+            properties:
+              code:
+                type: string
+                enum:
+                  - invalidRequest
+              message:
+                type: string

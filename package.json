@@ -1,0 +1,18 @@
+{
+  "name": "@vality/swag-api-keys",
+  "version": "1.0.0",
+  "dependencies": {
+    "@redocly/cli": "^1.0.0-beta.110",
+    "json-merge-patch": "^1.0.0",
+    "json-pointer": "^0.6.0",
+    "shelljs": "^0.8.0",
+    "swagger-ui-dist": "^3.18.3"
+  },
+  "private": true,
+  "scripts": {
+    "start": "openapi preview-docs",
+    "build": "node ./build.js",
+    "validate": "openapi lint",
+    "openapi": "openapi"
+  }
+}
