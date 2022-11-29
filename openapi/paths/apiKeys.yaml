@@ -4,7 +4,7 @@ get:
   tags:
     - apiKeys
   parameters:
-    - $ref: '../components/parameters/orgId.yaml'
+    - $ref: '../components/parameters/partyId.yaml'
     - name: status
       description: |
         Фильтр по статусу ключа. По умолчанию `active`.
@@ -26,8 +26,6 @@ get:
                 type: array
                 items:
                   $ref: '../components/schemas/ApiKey.yaml'
-    '404':
-      description: Организация не найдена
     '403':
       description: Операция недоступна
     '400':
@@ -39,7 +37,7 @@ post:
   tags:
     - apiKeys
   parameters:
-    - $ref: '../components/parameters/orgId.yaml'
+    - $ref: '../components/parameters/partyId.yaml'
   requestBody:
     content:
       application/json:
@@ -54,8 +52,6 @@ post:
             allOf:
               - $ref: '../components/schemas/ApiKey.yaml'
               - $ref: '../components/schemas/AccessToken.yaml'
-    '404':
-      description: Организация не найдена
     '403':
       description: Операция недоступна
     '400':
