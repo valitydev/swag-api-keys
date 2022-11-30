@@ -105,15 +105,15 @@ get_raw() ->
     <<"x-displayName">> => <<"Коды ошибок">>
   } ],
   <<"paths">> => #{
-    <<"/orgs/{orgId}/api-keys">> => #{
+    <<"/orgs/{partyId}/api-keys">> => #{
       <<"get">> => #{
         <<"tags">> => [ <<"apiKeys">> ],
         <<"summary">> => <<"Перечислить ключи организации">>,
         <<"operationId">> => <<"listApiKeys">>,
         <<"parameters">> => [ #{
-          <<"name">> => <<"orgId">>,
+          <<"name">> => <<"partyId">>,
           <<"in">> => <<"path">>,
-          <<"description">> => <<"Идентификатор организации">>,
+          <<"description">> => <<"Идентификатор участника">>,
           <<"required">> => true,
           <<"style">> => <<"simple">>,
           <<"explode">> => false,
@@ -121,7 +121,7 @@ get_raw() ->
             <<"maxLength">> => 40,
             <<"minLength">> => 1,
             <<"type">> => <<"string">>,
-            <<"description">> => <<"Идентификатор организации">>,
+            <<"description">> => <<"Идентификатор участника">>,
             <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
           }
         }, #{
@@ -158,9 +158,6 @@ get_raw() ->
           },
           <<"403">> => #{
             <<"description">> => <<"Операция недоступна">>
-          },
-          <<"404">> => #{
-            <<"description">> => <<"Организация не найдена">>
           }
         }
       },
@@ -169,9 +166,9 @@ get_raw() ->
         <<"summary">> => <<"Выпустить новый ключ">>,
         <<"operationId">> => <<"issueApiKey">>,
         <<"parameters">> => [ #{
-          <<"name">> => <<"orgId">>,
+          <<"name">> => <<"partyId">>,
           <<"in">> => <<"path">>,
-          <<"description">> => <<"Идентификатор организации">>,
+          <<"description">> => <<"Идентификатор участника">>,
           <<"required">> => true,
           <<"style">> => <<"simple">>,
           <<"explode">> => false,
@@ -179,7 +176,7 @@ get_raw() ->
             <<"maxLength">> => 40,
             <<"minLength">> => 1,
             <<"type">> => <<"string">>,
-            <<"description">> => <<"Идентификатор организации">>,
+            <<"description">> => <<"Идентификатор участника">>,
             <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
           }
         } ],
@@ -215,22 +212,19 @@ get_raw() ->
           },
           <<"403">> => #{
             <<"description">> => <<"Операция недоступна">>
-          },
-          <<"404">> => #{
-            <<"description">> => <<"Организация не найдена">>
           }
         }
       }
     },
-    <<"/orgs/{orgId}/api-keys/{apiKeyId}">> => #{
+    <<"/orgs/{partyId}/api-keys/{apiKeyId}">> => #{
       <<"get">> => #{
         <<"tags">> => [ <<"apiKeys">> ],
         <<"summary">> => <<"Получить данные ключа">>,
         <<"operationId">> => <<"getApiKey">>,
         <<"parameters">> => [ #{
-          <<"name">> => <<"orgId">>,
+          <<"name">> => <<"partyId">>,
           <<"in">> => <<"path">>,
-          <<"description">> => <<"Идентификатор организации">>,
+          <<"description">> => <<"Идентификатор участника">>,
           <<"required">> => true,
           <<"style">> => <<"simple">>,
           <<"explode">> => false,
@@ -238,7 +232,7 @@ get_raw() ->
             <<"maxLength">> => 40,
             <<"minLength">> => 1,
             <<"type">> => <<"string">>,
-            <<"description">> => <<"Идентификатор организации">>,
+            <<"description">> => <<"Идентификатор участника">>,
             <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
           }
         }, #{
@@ -282,15 +276,15 @@ get_raw() ->
         }
       }
     },
-    <<"/orgs/{orgId}/api-keys/{apiKeyId}/status">> => #{
+    <<"/orgs/{partyId}/api-keys/{apiKeyId}/status">> => #{
       <<"put">> => #{
         <<"tags">> => [ <<"apiKeys">> ],
         <<"summary">> => <<"Отозвать ключ">>,
         <<"operationId">> => <<"revokeApiKey">>,
         <<"parameters">> => [ #{
-          <<"name">> => <<"orgId">>,
+          <<"name">> => <<"partyId">>,
           <<"in">> => <<"path">>,
-          <<"description">> => <<"Идентификатор организации">>,
+          <<"description">> => <<"Идентификатор участника">>,
           <<"required">> => true,
           <<"style">> => <<"simple">>,
           <<"explode">> => false,
@@ -298,7 +292,7 @@ get_raw() ->
             <<"maxLength">> => 40,
             <<"minLength">> => 1,
             <<"type">> => <<"string">>,
-            <<"description">> => <<"Идентификатор организации">>,
+            <<"description">> => <<"Идентификатор участника">>,
             <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
           }
         }, #{
@@ -474,10 +468,10 @@ get_raw() ->
       }
     },
     <<"parameters">> => #{
-      <<"orgId">> => #{
-        <<"name">> => <<"orgId">>,
+      <<"partyId">> => #{
+        <<"name">> => <<"partyId">>,
         <<"in">> => <<"path">>,
-        <<"description">> => <<"Идентификатор организации">>,
+        <<"description">> => <<"Идентификатор участника">>,
         <<"required">> => true,
         <<"style">> => <<"simple">>,
         <<"explode">> => false,
@@ -485,7 +479,7 @@ get_raw() ->
           <<"maxLength">> => 40,
           <<"minLength">> => 1,
           <<"type">> => <<"string">>,
-          <<"description">> => <<"Идентификатор организации">>,
+          <<"description">> => <<"Идентификатор участника">>,
           <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
         }
       },

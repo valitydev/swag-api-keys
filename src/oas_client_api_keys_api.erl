@@ -22,7 +22,7 @@ get_api_key(Endpoint, Params) ->
 get_api_key(Endpoint, Params, Opts) ->
     process_response(oas_client_procession:process_request(
         get,
-        oas_client_utils:get_url(Endpoint, "/orgs/:orgId/api-keys/:apiKeyId"),
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys/:apiKeyId"),
         Params,
         get_request_spec(get_api_key),
         Opts
@@ -39,7 +39,7 @@ issue_api_key(Endpoint, Params) ->
 issue_api_key(Endpoint, Params, Opts) ->
     process_response(oas_client_procession:process_request(
         post,
-        oas_client_utils:get_url(Endpoint, "/orgs/:orgId/api-keys"),
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys"),
         Params,
         get_request_spec(issue_api_key),
         Opts
@@ -56,7 +56,7 @@ list_api_keys(Endpoint, Params) ->
 list_api_keys(Endpoint, Params, Opts) ->
     process_response(oas_client_procession:process_request(
         get,
-        oas_client_utils:get_url(Endpoint, "/orgs/:orgId/api-keys"),
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys"),
         Params,
         get_request_spec(list_api_keys),
         Opts
@@ -73,7 +73,7 @@ revoke_api_key(Endpoint, Params) ->
 revoke_api_key(Endpoint, Params, Opts) ->
     process_response(oas_client_procession:process_request(
         put,
-        oas_client_utils:get_url(Endpoint, "/orgs/:orgId/api-keys/:apiKeyId/status"),
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys/:apiKeyId/status"),
         Params,
         get_request_spec(revoke_api_key),
         Opts
@@ -100,7 +100,7 @@ process_response(Error, _) ->
 
 get_request_spec('get_api_key') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -111,7 +111,7 @@ get_request_spec('get_api_key') ->
     ];
 get_request_spec('issue_api_key') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -122,7 +122,7 @@ get_request_spec('issue_api_key') ->
     ];
 get_request_spec('list_api_keys') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -133,7 +133,7 @@ get_request_spec('list_api_keys') ->
     ];
 get_request_spec('revoke_api_key') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -164,15 +164,11 @@ get_response_spec('issue_api_key', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('issue_api_key', 403) ->
     undefined;
-get_response_spec('issue_api_key', 404) ->
-    undefined;
 get_response_spec('list_api_keys', 200) ->
     {'inline_response_200', 'inline_response_200'};
 get_response_spec('list_api_keys', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('list_api_keys', 403) ->
-    undefined;
-get_response_spec('list_api_keys', 404) ->
     undefined;
 get_response_spec('revoke_api_key', 204) ->
     undefined;
