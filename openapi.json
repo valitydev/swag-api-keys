@@ -27,7 +27,7 @@
     }
   ],
   "paths": {
-    "/orgs/{orgId}/api-keys": {
+    "/orgs/{partyId}/api-keys": {
       "get": {
         "summary": "Перечислить ключи организации",
         "operationId": "listApiKeys",
@@ -36,7 +36,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/orgId"
+            "$ref": "#/components/parameters/partyId"
           },
           {
             "name": "status",
@@ -75,9 +75,6 @@
           },
           "403": {
             "description": "Операция недоступна"
-          },
-          "404": {
-            "description": "Организация не найдена"
           }
         }
       },
@@ -89,7 +86,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/orgId"
+            "$ref": "#/components/parameters/partyId"
           }
         ],
         "requestBody": {
@@ -124,14 +121,11 @@
           },
           "403": {
             "description": "Операция недоступна"
-          },
-          "404": {
-            "description": "Организация не найдена"
           }
         }
       }
     },
-    "/orgs/{orgId}/api-keys/{apiKeyId}": {
+    "/orgs/{partyId}/api-keys/{apiKeyId}": {
       "get": {
         "summary": "Получить данные ключа",
         "operationId": "getApiKey",
@@ -140,7 +134,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/orgId"
+            "$ref": "#/components/parameters/partyId"
           },
           {
             "$ref": "#/components/parameters/apiKeyId"
@@ -169,7 +163,7 @@
         }
       }
     },
-    "/orgs/{orgId}/api-keys/{apiKeyId}/status": {
+    "/orgs/{partyId}/api-keys/{apiKeyId}/status": {
       "put": {
         "summary": "Отозвать ключ",
         "operationId": "revokeApiKey",
@@ -178,7 +172,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/components/parameters/orgId"
+            "$ref": "#/components/parameters/partyId"
           },
           {
             "$ref": "#/components/parameters/apiKeyId"
@@ -223,13 +217,13 @@
       }
     },
     "parameters": {
-      "orgId": {
-        "name": "orgId",
+      "partyId": {
+        "name": "partyId",
         "in": "path",
-        "description": "Идентификатор организации",
+        "description": "Идентификатор участника",
         "required": true,
         "schema": {
-          "description": "Идентификатор организации",
+          "description": "Идентификатор участника",
           "type": "string",
           "minLength": 1,
           "maxLength": 40,

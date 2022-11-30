@@ -70,14 +70,14 @@ tags:
 
       Если вы получили ошибку, которой нет в данном описании, обратитесь в техническую поддержку.
 paths:
-  /orgs/{orgId}/api-keys:
+  /orgs/{partyId}/api-keys:
     get:
       summary: Перечислить ключи организации
       operationId: listApiKeys
       tags:
         - apiKeys
       parameters:
-        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/partyId'
         - name: status
           description: |
             Фильтр по статусу ключа. По умолчанию `active`.
@@ -103,15 +103,13 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           description: Операция недоступна
-        '404':
-          description: Организация не найдена
     post:
       summary: Выпустить новый ключ
       operationId: issueApiKey
       tags:
         - apiKeys
       parameters:
-        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/partyId'
       requestBody:
         content:
           application/json:
@@ -130,16 +128,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           description: Операция недоступна
-        '404':
-          description: Организация не найдена
-  /orgs/{orgId}/api-keys/{apiKeyId}:
+  /orgs/{partyId}/api-keys/{apiKeyId}:
     get:
       summary: Получить данные ключа
       operationId: getApiKey
       tags:
         - apiKeys
       parameters:
-        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
       responses:
         '200':
@@ -154,14 +150,14 @@ paths:
           description: Операция недоступна
         '404':
           description: Ключ не найден
-  /orgs/{orgId}/api-keys/{apiKeyId}/status:
+  /orgs/{partyId}/api-keys/{apiKeyId}/status:
     put:
       summary: Отозвать ключ
       operationId: revokeApiKey
       tags:
         - apiKeys
       parameters:
-        - $ref: '#/components/parameters/orgId'
+        - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
       requestBody:
         content:
@@ -192,13 +188,13 @@ components:
         ```
         Запросы к данному API авторизуются сессионным токеном доступа, который вы получаете в результате аутентификации в личном кабинете.
   parameters:
-    orgId:
-      name: orgId
+    partyId:
+      name: partyId
       in: path
-      description: Идентификатор организации
+      description: Идентификатор участника
       required: true
       schema:
-        description: Идентификатор организации
+        description: Идентификатор участника
         type: string
         minLength: 1
         maxLength: 40
