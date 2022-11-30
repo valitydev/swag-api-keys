@@ -91,22 +91,22 @@ get_operation(OperationId) ->
 get_operations() ->
     #{ 
         'GetApiKey' => #{
-            path => "/orgs/:orgId/api-keys/:apiKeyId",
+            path => "/orgs/:partyId/api-keys/:apiKeyId",
             method => <<"GET">>,
             handler => 'oas_server_api_keys_handler'
         },
         'IssueApiKey' => #{
-            path => "/orgs/:orgId/api-keys",
+            path => "/orgs/:partyId/api-keys",
             method => <<"POST">>,
             handler => 'oas_server_api_keys_handler'
         },
         'ListApiKeys' => #{
-            path => "/orgs/:orgId/api-keys",
+            path => "/orgs/:partyId/api-keys",
             method => <<"GET">>,
             handler => 'oas_server_api_keys_handler'
         },
         'RevokeApiKey' => #{
-            path => "/orgs/:orgId/api-keys/:apiKeyId/status",
+            path => "/orgs/:partyId/api-keys/:apiKeyId/status",
             method => <<"PUT">>,
             handler => 'oas_server_api_keys_handler'
         }

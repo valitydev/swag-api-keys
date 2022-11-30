@@ -301,7 +301,7 @@ validate_headers(_, Req) ->
 
 get_request_spec('GetApiKey') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -312,7 +312,7 @@ get_request_spec('GetApiKey') ->
     ];
 get_request_spec('IssueApiKey') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -323,7 +323,7 @@ get_request_spec('IssueApiKey') ->
     ];
 get_request_spec('ListApiKeys') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -334,7 +334,7 @@ get_request_spec('ListApiKeys') ->
     ];
 get_request_spec('RevokeApiKey') ->
     [
-        {'orgId', #{
+        {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -365,15 +365,11 @@ get_response_spec('IssueApiKey', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('IssueApiKey', 403) ->
     undefined;
-get_response_spec('IssueApiKey', 404) ->
-    undefined;
 get_response_spec('ListApiKeys', 200) ->
     {'inline_response_200', 'inline_response_200'};
 get_response_spec('ListApiKeys', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('ListApiKeys', 403) ->
-    undefined;
-get_response_spec('ListApiKeys', 404) ->
     undefined;
 get_response_spec('RevokeApiKey', 204) ->
     undefined;
