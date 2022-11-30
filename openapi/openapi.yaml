@@ -18,11 +18,11 @@ tags:
     description:
       $ref: './docs/errors.md'
 paths:
-  /orgs/{orgId}/api-keys:
+  /orgs/{partyId}/api-keys:
     $ref: ./paths/apiKeys.yaml
-  /orgs/{orgId}/api-keys/{apiKeyId}:
+  /orgs/{partyId}/api-keys/{apiKeyId}:
     $ref: ./paths/apiKey.yaml
-  /orgs/{orgId}/api-keys/{apiKeyId}/status:
+  /orgs/{partyId}/api-keys/{apiKeyId}/status:
     $ref: ./paths/apiKeyStatus.yaml
 components:
   securitySchemes:
