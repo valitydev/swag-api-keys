@@ -1,6 +1,6 @@
 name: apiKeyRevokeToken
 in: path
-description: Идентификатор ключа
+description: Токен отзыва ключа
 required: false
 schema:
   $ref: '../schemas/RevokeToken.yaml'
