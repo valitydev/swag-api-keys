@@ -1,0 +1,6 @@
+description: Токен отзыва ключа, приходит с ссылкой в почте
+type: string
+minLength: 1
+maxLength: 4000
+example: |
+  f767b77e-300f-47a7-84e2-e24ea585a9f0

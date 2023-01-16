@@ -1,0 +1,6 @@
+name: apiKeyRevokeToken
+in: path
+description: Идентификатор ключа
+required: false
+schema:
+  $ref: '../schemas/RevokeToken.yaml'

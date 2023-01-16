@@ -6,6 +6,7 @@ put:
   parameters:
     - $ref: '../components/parameters/partyId.yaml'
     - $ref: '../components/parameters/apiKeyId.yaml'
+    - $ref: '../components/parameters/apiKeyRevokeToken.yaml'
   requestBody:
     content:
       application/json:
