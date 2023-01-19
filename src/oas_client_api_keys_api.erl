@@ -144,6 +144,10 @@ get_request_spec('revoke_api_key') ->
         {'binary', #{
             source => body,
             rules  => [schema, {required, false }]
+        }},
+        {'apiKeyRevokeToken', #{
+            source => qs_val,
+            rules  => [{type, 'RevokeToken'}, true, {required, false }]
         }}
     ].
 
