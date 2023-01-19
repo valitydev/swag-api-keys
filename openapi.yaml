@@ -153,12 +153,17 @@ paths:
   /orgs/{partyId}/api-keys/{apiKeyId}/status:
     put:
       summary: Отозвать ключ
+      description: |
+        Сначала делается запрос без apiKeyRevokeToken,
+        который посылает на почту ссылку с тем же запросом,
+        но с apiKeyRevokeToken для подтверждения операции
       operationId: revokeApiKey
       tags:
         - apiKeys
       parameters:
         - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
+        - $ref: '#/components/parameters/apiKeyRevokeToken'
       requestBody:
         content:
           application/json:
@@ -206,6 +211,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ApiKeyID'
+    apiKeyRevokeToken:
+      name: apiKeyRevokeToken
+      in: query
+      description: Токен отзыва ключа
+      required: false
+      schema:
+        $ref: '#/components/schemas/RevokeToken'
   schemas:
     ApiKeyStatus:
       description: Статус ключа
@@ -262,6 +274,13 @@ components:
           maxLength: 4000
           example: |
             eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0a2kiOiIxS2dJWUJHc0NncSIsImlhdCI6MTUxNjIzOTAyMn0.6YsaZQC9A7BjxXHwRbJfUO6VujOb4rHTKrqmMt64TbQ
+    RevokeToken:
+      description: Токен отзыва ключа, приходит с ссылкой в почте
+      type: string
+      minLength: 1
+      maxLength: 4000
+      example: |
+        f767b77e-300f-47a7-84e2-e24ea585a9f0
   responses:
     BadRequest:
       description: Переданы ошибочные данные

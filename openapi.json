@@ -166,6 +166,7 @@
     "/orgs/{partyId}/api-keys/{apiKeyId}/status": {
       "put": {
         "summary": "Отозвать ключ",
+        "description": "Сначала делается запрос без apiKeyRevokeToken,\nкоторый посылает на почту ссылку с тем же запросом,\nно с apiKeyRevokeToken для подтверждения операции\n",
         "operationId": "revokeApiKey",
         "tags": [
           "apiKeys"
@@ -176,6 +177,9 @@
           },
           {
             "$ref": "#/components/parameters/apiKeyId"
+          },
+          {
+            "$ref": "#/components/parameters/apiKeyRevokeToken"
           }
         ],
         "requestBody": {
@@ -237,6 +241,15 @@
         "required": true,
         "schema": {
           "$ref": "#/components/schemas/ApiKeyID"
+        }
+      },
+      "apiKeyRevokeToken": {
+        "name": "apiKeyRevokeToken",
+        "in": "query",
+        "description": "Токен отзыва ключа",
+        "required": false,
+        "schema": {
+          "$ref": "#/components/schemas/RevokeToken"
         }
       }
     },
@@ -307,6 +320,13 @@
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0a2kiOiIxS2dJWUJHc0NncSIsImlhdCI6MTUxNjIzOTAyMn0.6YsaZQC9A7BjxXHwRbJfUO6VujOb4rHTKrqmMt64TbQ\n"
           }
         }
+      },
+      "RevokeToken": {
+        "description": "Токен отзыва ключа, приходит с ссылкой в почте",
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4000,
+        "example": "f767b77e-300f-47a7-84e2-e24ea585a9f0\n"
       }
     },
     "responses": {
