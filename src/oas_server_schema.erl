@@ -280,6 +280,7 @@ get_raw() ->
       <<"put">> => #{
         <<"tags">> => [ <<"apiKeys">> ],
         <<"summary">> => <<"Отозвать ключ">>,
+        <<"description">> => <<"Сначала делается запрос без apiKeyRevokeToken,\nкоторый посылает на почту ссылку с тем же запросом,\nно с apiKeyRevokeToken для подтверждения операции\n">>,
         <<"operationId">> => <<"revokeApiKey">>,
         <<"parameters">> => [ #{
           <<"name">> => <<"partyId">>,
@@ -304,6 +305,16 @@ get_raw() ->
           <<"explode">> => false,
           <<"schema">> => #{
             <<"$ref">> => <<"#/components/schemas/ApiKeyID">>
+          }
+        }, #{
+          <<"name">> => <<"apiKeyRevokeToken">>,
+          <<"in">> => <<"query">>,
+          <<"description">> => <<"Токен отзыва ключа">>,
+          <<"required">> => false,
+          <<"style">> => <<"form">>,
+          <<"explode">> => true,
+          <<"schema">> => #{
+            <<"$ref">> => <<"#/components/schemas/RevokeToken">>
           }
         } ],
         <<"requestBody">> => #{
@@ -406,6 +417,13 @@ get_raw() ->
           }
         }
       },
+      <<"RevokeToken">> => #{
+        <<"maxLength">> => 4000,
+        <<"minLength">> => 1,
+        <<"type">> => <<"string">>,
+        <<"description">> => <<"Токен отзыва ключа, приходит с ссылкой в почте">>,
+        <<"example">> => <<"f767b77e-300f-47a7-84e2-e24ea585a9f0\n">>
+      },
       <<"inline_response_200">> => #{
         <<"required">> => [ <<"results">> ],
         <<"type">> => <<"object">>,
@@ -492,6 +510,17 @@ get_raw() ->
         <<"explode">> => false,
         <<"schema">> => #{
           <<"$ref">> => <<"#/components/schemas/ApiKeyID">>
+        }
+      },
+      <<"apiKeyRevokeToken">> => #{
+        <<"name">> => <<"apiKeyRevokeToken">>,
+        <<"in">> => <<"query">>,
+        <<"description">> => <<"Токен отзыва ключа">>,
+        <<"required">> => false,
+        <<"style">> => <<"form">>,
+        <<"explode">> => true,
+        <<"schema">> => #{
+          <<"$ref">> => <<"#/components/schemas/RevokeToken">>
         }
       }
     },
