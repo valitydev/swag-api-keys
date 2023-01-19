@@ -1,0 +1,6 @@
+name: apiKeyRevokeToken
+in: query
+description: Токен отзыва ключа
+required: false
+schema:
+  $ref: '../schemas/RevokeToken.yaml'
