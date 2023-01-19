@@ -1,5 +1,5 @@
 name: apiKeyRevokeToken
-in: path
+in: query
 description: Токен отзыва ключа
 required: false
 schema:

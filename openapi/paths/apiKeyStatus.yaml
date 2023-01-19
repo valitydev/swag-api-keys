@@ -1,5 +1,9 @@
 put:
   summary: Отозвать ключ
+  description: |
+    Сначала делается запрос без apiKeyRevokeToken,
+    который посылает на почту ссылку с тем же запросом,
+    но с apiKeyRevokeToken для подтверждения операции
   operationId: revokeApiKey
   tags:
     - apiKeys
