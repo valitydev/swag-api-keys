@@ -24,6 +24,8 @@ paths:
     $ref: ./paths/apiKey.yaml
   /orgs/{partyId}/api-keys/{apiKeyId}/status:
     $ref: ./paths/apiKeyStatus.yaml
+  /orgs/{partyId}/revoke-api-key/{apiKeyId}:
+    $ref: ./paths/revokeApiKey.yaml
 components:
   securitySchemes:
     bearer:
