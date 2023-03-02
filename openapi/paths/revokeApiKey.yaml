@@ -11,13 +11,6 @@ get:
     - $ref: '../components/parameters/partyId.yaml'
     - $ref: '../components/parameters/apiKeyId.yaml'
     - $ref: '../components/parameters/apiKeyRevokeToken.yaml'
-  requestBody:
-    content:
-      application/json:
-        schema:
-          type: string
-          enum:
-            - Revoked
   responses:
     '204':
       description: Ключ отозван
