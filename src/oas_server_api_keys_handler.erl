@@ -76,10 +76,17 @@ allowed_methods(
 allowed_methods(
     Req,
     State = #state{
-        operation_id = 'RevokeApiKey'
+        operation_id = 'RequestRevokeApiKey'
     }
 ) ->
     {[<<"PUT">>], Req, State};
+allowed_methods(
+    Req,
+    State = #state{
+        operation_id = 'RevokeApiKey'
+    }
+) ->
+    {[<<"GET">>], Req, State};
 allowed_methods(Req, State) ->
     {[], Req, State}.
 
@@ -109,6 +116,14 @@ is_authorized(
     Req0,
     State = #state{
         operation_id  = 'ListApiKeys' = OperationID,
+        logic_handler = LogicHandler,
+        context       = Context
+    }
+) ->
+is_authorized(
+    Req0,
+    State = #state{
+        operation_id  = 'RequestRevokeApiKey' = OperationID,
         logic_handler = LogicHandler,
         context       = Context
     }
@@ -165,6 +180,15 @@ valid_content_headers(
     Req0,
     State = #state{
         operation_id = 'ListApiKeys'
+    }
+) ->
+    Headers = [],
+    {Result, Req} = validate_headers(Headers, Req0),
+    {Result, Req, State};
+valid_content_headers(
+    Req0,
+    State = #state{
+        operation_id = 'RequestRevokeApiKey'
     }
 ) ->
     Headers = [],
@@ -332,7 +356,7 @@ get_request_spec('ListApiKeys') ->
             rules  => [{type, 'ApiKeyStatus'}, true, {required, false }]
         }}
     ];
-get_request_spec('RevokeApiKey') ->
+get_request_spec('RequestRevokeApiKey') ->
     [
         {'partyId', #{
             source => binding,
@@ -345,10 +369,21 @@ get_request_spec('RevokeApiKey') ->
 {'binary', #{
             source => body,
             rules  => [schema, {required, false }]
+        }}
+    ];
+get_request_spec('RevokeApiKey') ->
+    [
+        {'partyId', #{
+            source => binding,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'apiKeyId', #{
+            source => binding,
+            rules  => [{type, 'ApiKeyID'}, true, {required, true }]
         }},
 {'apiKeyRevokeToken', #{
             source => qs_val,
-            rules  => [{type, 'RevokeToken'}, true, {required, false }]
+            rules  => [{type, 'RevokeToken'}, true, {required, true }]
         }}
     ].
 
@@ -374,6 +409,14 @@ get_response_spec('ListApiKeys', 200) ->
 get_response_spec('ListApiKeys', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('ListApiKeys', 403) ->
+    undefined;
+get_response_spec('RequestRevokeApiKey', 204) ->
+    undefined;
+get_response_spec('RequestRevokeApiKey', 400) ->
+    {'inline_response_400', 'inline_response_400'};
+get_response_spec('RequestRevokeApiKey', 403) ->
+    undefined;
+get_response_spec('RequestRevokeApiKey', 404) ->
     undefined;
 get_response_spec('RevokeApiKey', 204) ->
     undefined;

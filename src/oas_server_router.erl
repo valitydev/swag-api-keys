@@ -105,9 +105,14 @@ get_operations() ->
             method => <<"GET">>,
             handler => 'oas_server_api_keys_handler'
         },
-        'RevokeApiKey' => #{
+        'RequestRevokeApiKey' => #{
             path => "/orgs/:partyId/api-keys/:apiKeyId/status",
             method => <<"PUT">>,
+            handler => 'oas_server_api_keys_handler'
+        },
+        'RevokeApiKey' => #{
+            path => "/orgs/:partyId/revoke-api-key/:apiKeyId",
+            method => <<"GET">>,
             handler => 'oas_server_api_keys_handler'
         }
     }.
