@@ -279,8 +279,72 @@ get_raw() ->
     <<"/orgs/{partyId}/api-keys/{apiKeyId}/status">> => #{
       <<"put">> => #{
         <<"tags">> => [ <<"apiKeys">> ],
+        <<"summary">> => <<"Запросить отзыв ключа">>,
+        <<"description">> => <<"Просит отозвать Api Key, для подтверждения запроса\nпосылает на почту запросившего письмо с ссылкой на\nrevokeApiKey для подтверждения операции\n">>,
+        <<"operationId">> => <<"requestRevokeApiKey">>,
+        <<"parameters">> => [ #{
+          <<"name">> => <<"partyId">>,
+          <<"in">> => <<"path">>,
+          <<"description">> => <<"Идентификатор участника">>,
+          <<"required">> => true,
+          <<"style">> => <<"simple">>,
+          <<"explode">> => false,
+          <<"schema">> => #{
+            <<"maxLength">> => 40,
+            <<"minLength">> => 1,
+            <<"type">> => <<"string">>,
+            <<"description">> => <<"Идентификатор участника">>,
+            <<"example">> => <<"bdaf9e76-1c5b-4798-b154-19b87a61dc94">>
+          }
+        }, #{
+          <<"name">> => <<"apiKeyId">>,
+          <<"in">> => <<"path">>,
+          <<"description">> => <<"Идентификатор ключа">>,
+          <<"required">> => true,
+          <<"style">> => <<"simple">>,
+          <<"explode">> => false,
+          <<"schema">> => #{
+            <<"$ref">> => <<"#/components/schemas/ApiKeyID">>
+          }
+        } ],
+        <<"requestBody">> => #{
+          <<"content">> => #{
+            <<"application/json">> => #{
+              <<"schema">> => #{
+                <<"type">> => <<"string">>,
+                <<"enum">> => [ <<"Revoked">> ]
+              }
+            }
+          }
+        },
+        <<"responses">> => #{
+          <<"204">> => #{
+            <<"description">> => <<"Запрос на операцию получен">>
+          },
+          <<"400">> => #{
+            <<"description">> => <<"Переданы ошибочные данные">>,
+            <<"content">> => #{
+              <<"application/json">> => #{
+                <<"schema">> => #{
+                  <<"$ref">> => <<"#/components/schemas/inline_response_400">>
+                }
+              }
+            }
+          },
+          <<"403">> => #{
+            <<"description">> => <<"Операция недоступна">>
+          },
+          <<"404">> => #{
+            <<"description">> => <<"Ключ не найден">>
+          }
+        }
+      }
+    },
+    <<"/orgs/{partyId}/revoke-api-key/{apiKeyId}">> => #{
+      <<"get">> => #{
+        <<"tags">> => [ <<"apiKeys">> ],
         <<"summary">> => <<"Отозвать ключ">>,
-        <<"description">> => <<"Сначала делается запрос без apiKeyRevokeToken,\nкоторый посылает на почту ссылку с тем же запросом,\nно с apiKeyRevokeToken для подтверждения операции\n">>,
+        <<"description">> => <<"Ссылка на этот запрос приходит на почту запросившего\nrequestRevokeApiKey, в результате выполнения этого запроса\nApi Key будет отозван\n">>,
         <<"operationId">> => <<"revokeApiKey">>,
         <<"parameters">> => [ #{
           <<"name">> => <<"partyId">>,
@@ -310,23 +374,13 @@ get_raw() ->
           <<"name">> => <<"apiKeyRevokeToken">>,
           <<"in">> => <<"query">>,
           <<"description">> => <<"Токен отзыва ключа">>,
-          <<"required">> => false,
+          <<"required">> => true,
           <<"style">> => <<"form">>,
           <<"explode">> => true,
           <<"schema">> => #{
             <<"$ref">> => <<"#/components/schemas/RevokeToken">>
           }
         } ],
-        <<"requestBody">> => #{
-          <<"content">> => #{
-            <<"application/json">> => #{
-              <<"schema">> => #{
-                <<"type">> => <<"string">>,
-                <<"enum">> => [ <<"Revoked">> ]
-              }
-            }
-          }
-        },
         <<"responses">> => #{
           <<"204">> => #{
             <<"description">> => <<"Ключ отозван">>
@@ -516,7 +570,7 @@ get_raw() ->
         <<"name">> => <<"apiKeyRevokeToken">>,
         <<"in">> => <<"query">>,
         <<"description">> => <<"Токен отзыва ключа">>,
-        <<"required">> => false,
+        <<"required">> => true,
         <<"style">> => <<"form">>,
         <<"explode">> => true,
         <<"schema">> => #{

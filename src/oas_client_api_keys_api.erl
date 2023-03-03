@@ -8,6 +8,8 @@
 -export([issue_api_key/3]).
 -export([list_api_keys/2]).
 -export([list_api_keys/3]).
+-export([request_revoke_api_key/2]).
+-export([request_revoke_api_key/3]).
 -export([revoke_api_key/2]).
 -export([revoke_api_key/3]).
 -spec get_api_key(Endpoint :: oas_client:endpoint(), Params :: map()) ->
@@ -61,6 +63,23 @@ list_api_keys(Endpoint, Params, Opts) ->
         get_request_spec(list_api_keys),
         Opts
     ), list_api_keys).
+-spec request_revoke_api_key(Endpoint :: oas_client:endpoint(), Params :: map()) ->
+    {ok, Code :: integer(), RespHeaders :: list(), Response :: map()} |
+    {error, _Reason}.
+request_revoke_api_key(Endpoint, Params) ->
+    request_revoke_api_key(Endpoint, Params, []).
+
+-spec request_revoke_api_key(Endpoint :: oas_client:endpoint(), Params :: map(), Opts :: oas_client:transport_opts()) ->
+    {ok, Code :: integer(), RespHeaders :: list(), Response :: map()} |
+    {error, _Reason}.
+request_revoke_api_key(Endpoint, Params, Opts) ->
+    process_response(oas_client_procession:process_request(
+        put,
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys/:apiKeyId/status"),
+        Params,
+        get_request_spec(request_revoke_api_key),
+        Opts
+    ), request_revoke_api_key).
 -spec revoke_api_key(Endpoint :: oas_client:endpoint(), Params :: map()) ->
     {ok, Code :: integer(), RespHeaders :: list(), Response :: map()} |
     {error, _Reason}.
@@ -72,8 +91,8 @@ revoke_api_key(Endpoint, Params) ->
     {error, _Reason}.
 revoke_api_key(Endpoint, Params, Opts) ->
     process_response(oas_client_procession:process_request(
-        put,
-        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/api-keys/:apiKeyId/status"),
+        get,
+        oas_client_utils:get_url(Endpoint, "/orgs/:partyId/revoke-api-key/:apiKeyId"),
         Params,
         get_request_spec(revoke_api_key),
         Opts
@@ -131,7 +150,7 @@ get_request_spec('list_api_keys') ->
             rules  => [{type, 'ApiKeyStatus'}, true, {required, false }]
         }}
     ];
-get_request_spec('revoke_api_key') ->
+get_request_spec('request_revoke_api_key') ->
     [
         {'partyId', #{
             source => binding,
@@ -144,10 +163,21 @@ get_request_spec('revoke_api_key') ->
         {'binary', #{
             source => body,
             rules  => [schema, {required, false }]
+        }}
+    ];
+get_request_spec('revoke_api_key') ->
+    [
+        {'partyId', #{
+            source => binding,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
+        }},
+        {'apiKeyId', #{
+            source => binding,
+            rules  => [{type, 'ApiKeyID'}, true, {required, true }]
         }},
         {'apiKeyRevokeToken', #{
             source => qs_val,
-            rules  => [{type, 'RevokeToken'}, true, {required, false }]
+            rules  => [{type, 'RevokeToken'}, true, {required, true }]
         }}
     ].
 
@@ -173,6 +203,14 @@ get_response_spec('list_api_keys', 200) ->
 get_response_spec('list_api_keys', 400) ->
     {'inline_response_400', 'inline_response_400'};
 get_response_spec('list_api_keys', 403) ->
+    undefined;
+get_response_spec('request_revoke_api_key', 204) ->
+    undefined;
+get_response_spec('request_revoke_api_key', 400) ->
+    {'inline_response_400', 'inline_response_400'};
+get_response_spec('request_revoke_api_key', 403) ->
+    undefined;
+get_response_spec('request_revoke_api_key', 404) ->
     undefined;
 get_response_spec('revoke_api_key', 204) ->
     undefined;
