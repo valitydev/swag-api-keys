@@ -1,16 +1,15 @@
 put:
-  summary: Отозвать ключ
+  summary: Запросить отзыв ключа
   description: |
-    Сначала делается запрос без apiKeyRevokeToken,
-    который посылает на почту ссылку с тем же запросом,
-    но с apiKeyRevokeToken для подтверждения операции
-  operationId: revokeApiKey
+    Просит отозвать Api Key, для подтверждения запроса
+    посылает на почту запросившего письмо с ссылкой на
+    revokeApiKey для подтверждения операции
+  operationId: requestRevokeApiKey
   tags:
     - apiKeys
   parameters:
     - $ref: '../components/parameters/partyId.yaml'
     - $ref: '../components/parameters/apiKeyId.yaml'
-    - $ref: '../components/parameters/apiKeyRevokeToken.yaml'
   requestBody:
     content:
       application/json:
@@ -20,7 +19,7 @@ put:
             - Revoked
   responses:
     '204':
-      description: Ключ отозван
+      description: Запрос на операцию получен
     '404':
       description: Ключ не найден
     '403':
