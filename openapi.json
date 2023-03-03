@@ -165,8 +165,52 @@
     },
     "/orgs/{partyId}/api-keys/{apiKeyId}/status": {
       "put": {
+        "summary": "Запросить отзыв ключа",
+        "description": "Просит отозвать Api Key, для подтверждения запроса\nпосылает на почту запросившего письмо с ссылкой на\nrevokeApiKey для подтверждения операции\n",
+        "operationId": "requestRevokeApiKey",
+        "tags": [
+          "apiKeys"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/partyId"
+          },
+          {
+            "$ref": "#/components/parameters/apiKeyId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "Revoked"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Запрос на операцию получен"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "description": "Операция недоступна"
+          },
+          "404": {
+            "description": "Ключ не найден"
+          }
+        }
+      }
+    },
+    "/orgs/{partyId}/revoke-api-key/{apiKeyId}": {
+      "get": {
         "summary": "Отозвать ключ",
-        "description": "Сначала делается запрос без apiKeyRevokeToken,\nкоторый посылает на почту ссылку с тем же запросом,\nно с apiKeyRevokeToken для подтверждения операции\n",
+        "description": "Ссылка на этот запрос приходит на почту запросившего\nrequestRevokeApiKey, в результате выполнения этого запроса\nApi Key будет отозван\n",
         "operationId": "revokeApiKey",
         "tags": [
           "apiKeys"
@@ -182,18 +226,6 @@
             "$ref": "#/components/parameters/apiKeyRevokeToken"
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string",
-                "enum": [
-                  "Revoked"
-                ]
-              }
-            }
-          }
-        },
         "responses": {
           "204": {
             "description": "Ключ отозван"
@@ -247,7 +279,7 @@
         "name": "apiKeyRevokeToken",
         "in": "query",
         "description": "Токен отзыва ключа",
-        "required": false,
+        "required": true,
         "schema": {
           "$ref": "#/components/schemas/RevokeToken"
         }

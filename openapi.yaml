@@ -152,18 +152,17 @@ paths:
           description: Ключ не найден
   /orgs/{partyId}/api-keys/{apiKeyId}/status:
     put:
-      summary: Отозвать ключ
+      summary: Запросить отзыв ключа
       description: |
-        Сначала делается запрос без apiKeyRevokeToken,
-        который посылает на почту ссылку с тем же запросом,
-        но с apiKeyRevokeToken для подтверждения операции
-      operationId: revokeApiKey
+        Просит отозвать Api Key, для подтверждения запроса
+        посылает на почту запросившего письмо с ссылкой на
+        revokeApiKey для подтверждения операции
+      operationId: requestRevokeApiKey
       tags:
         - apiKeys
       parameters:
         - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
-        - $ref: '#/components/parameters/apiKeyRevokeToken'
       requestBody:
         content:
           application/json:
@@ -171,6 +170,29 @@ paths:
               type: string
               enum:
                 - Revoked
+      responses:
+        '204':
+          description: Запрос на операцию получен
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Операция недоступна
+        '404':
+          description: Ключ не найден
+  /orgs/{partyId}/revoke-api-key/{apiKeyId}:
+    get:
+      summary: Отозвать ключ
+      description: |
+        Ссылка на этот запрос приходит на почту запросившего
+        requestRevokeApiKey, в результате выполнения этого запроса
+        Api Key будет отозван
+      operationId: revokeApiKey
+      tags:
+        - apiKeys
+      parameters:
+        - $ref: '#/components/parameters/partyId'
+        - $ref: '#/components/parameters/apiKeyId'
+        - $ref: '#/components/parameters/apiKeyRevokeToken'
       responses:
         '204':
           description: Ключ отозван
@@ -215,7 +237,7 @@ components:
       name: apiKeyRevokeToken
       in: query
       description: Токен отзыва ключа
-      required: false
+      required: true
       schema:
         $ref: '#/components/schemas/RevokeToken'
   schemas:
