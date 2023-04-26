@@ -14,7 +14,7 @@
     "build": "node ./build.js",
     "validate": "openapi lint",
     "openapi": "openapi",
-    "codegen": "vality-openapi generate ./web_deploy/openapi.json && cp .npmrc ./lib"
+    "codegen": "vality-openapi generate ./dist/openapi.json"
   },
   "devDependencies": {
     "@vality/openapi-generator-cli": "^1.0.1-0ab2945.0"
