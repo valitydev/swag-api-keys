@@ -13,6 +13,10 @@
     "start": "openapi preview-docs",
     "build": "node ./build.js",
     "validate": "openapi lint",
-    "openapi": "openapi"
+    "openapi": "openapi",
+    "codegen": "vality-openapi generate ./web_deploy/openapi.json && cp .npmrc ./lib"
+  },
+  "devDependencies": {
+    "@vality/openapi-generator-cli": "^1.0.1-0ab2945.0"
   }
 }
