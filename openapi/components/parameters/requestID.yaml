@@ -1,0 +1,11 @@
+name: X-Request-ID
+in: header
+description: Уникальный идентификатор запроса к системе
+required: true
+schema:
+  description: Уникальный идентификатор запроса к системе
+  type: string
+  minLength: 1
+  maxLength: 32
+  example: 30672daac16a1f3c5e770a5a09626d1f
+  
