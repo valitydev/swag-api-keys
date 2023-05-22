@@ -164,7 +164,7 @@ valid_content_headers(
         operation_id = 'GetApiKey'
     }
 ) ->
-    Headers = [],
+    Headers = ["X-Request-ID","X-Request-Deadline"],
     {Result, Req} = validate_headers(Headers, Req0),
     {Result, Req, State};
 valid_content_headers(
@@ -182,7 +182,7 @@ valid_content_headers(
         operation_id = 'ListApiKeys'
     }
 ) ->
-    Headers = [],
+    Headers = ["X-Request-ID","X-Request-Deadline"],
     {Result, Req} = validate_headers(Headers, Req0),
     {Result, Req, State};
 valid_content_headers(
@@ -191,7 +191,7 @@ valid_content_headers(
         operation_id = 'RequestRevokeApiKey'
     }
 ) ->
-    Headers = [],
+    Headers = ["X-Request-ID","X-Request-Deadline"],
     {Result, Req} = validate_headers(Headers, Req0),
     {Result, Req, State};
 valid_content_headers(
@@ -200,7 +200,7 @@ valid_content_headers(
         operation_id = 'RevokeApiKey'
     }
 ) ->
-    Headers = [],
+    Headers = ["X-Request-ID","X-Request-Deadline"],
     {Result, Req} = validate_headers(Headers, Req0),
     {Result, Req, State};
 valid_content_headers(Req, State) ->
@@ -325,13 +325,21 @@ validate_headers(_, Req) ->
 
 get_request_spec('GetApiKey') ->
     [
-        {'partyId', #{
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
 {'apiKeyId', #{
             source => binding,
             rules  => [{type, 'ApiKeyID'}, true, {required, true }]
+        }},
+{'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ];
 get_request_spec('IssueApiKey') ->
@@ -347,9 +355,17 @@ get_request_spec('IssueApiKey') ->
     ];
 get_request_spec('ListApiKeys') ->
     [
-        {'partyId', #{
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }},
 {'status', #{
             source => qs_val,
@@ -358,7 +374,11 @@ get_request_spec('ListApiKeys') ->
     ];
 get_request_spec('RequestRevokeApiKey') ->
     [
-        {'partyId', #{
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -369,11 +389,19 @@ get_request_spec('RequestRevokeApiKey') ->
 {'binary', #{
             source => body,
             rules  => [schema, {required, false }]
+        }},
+{'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ];
 get_request_spec('RevokeApiKey') ->
     [
-        {'partyId', #{
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
+{'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
         }},
@@ -384,6 +412,10 @@ get_request_spec('RevokeApiKey') ->
 {'apiKeyRevokeToken', #{
             source => qs_val,
             rules  => [{type, 'RevokeToken'}, true, {required, true }]
+        }},
+{'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ].
 
