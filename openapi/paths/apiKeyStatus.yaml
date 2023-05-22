@@ -8,6 +8,8 @@ put:
   tags:
     - apiKeys
   parameters:
+    - $ref: '../components/parameters/requestID.yaml'
+    - $ref: '../components/parameters/deadline.yaml'
     - $ref: '../components/parameters/partyId.yaml'
     - $ref: '../components/parameters/apiKeyId.yaml'
   requestBody:
