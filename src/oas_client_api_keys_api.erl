@@ -119,6 +119,10 @@ process_response(Error, _) ->
 
 get_request_spec('get_api_key') ->
     [
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
         {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
@@ -126,6 +130,10 @@ get_request_spec('get_api_key') ->
         {'apiKeyId', #{
             source => binding,
             rules  => [{type, 'ApiKeyID'}, true, {required, true }]
+        }},
+        {'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ];
 get_request_spec('issue_api_key') ->
@@ -141,9 +149,17 @@ get_request_spec('issue_api_key') ->
     ];
 get_request_spec('list_api_keys') ->
     [
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
         {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
+        }},
+        {'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }},
         {'status', #{
             source => qs_val,
@@ -152,6 +168,10 @@ get_request_spec('list_api_keys') ->
     ];
 get_request_spec('request_revoke_api_key') ->
     [
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
         {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
@@ -163,10 +183,18 @@ get_request_spec('request_revoke_api_key') ->
         {'binary', #{
             source => body,
             rules  => [schema, {required, false }]
+        }},
+        {'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ];
 get_request_spec('revoke_api_key') ->
     [
+        {'X-Request-ID', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 32 }, {min_length, 1 }, true, {required, true }]
+        }},
         {'partyId', #{
             source => binding,
             rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, true }]
@@ -178,6 +206,10 @@ get_request_spec('revoke_api_key') ->
         {'apiKeyRevokeToken', #{
             source => qs_val,
             rules  => [{type, 'RevokeToken'}, true, {required, true }]
+        }},
+        {'X-Request-Deadline', #{
+            source => header,
+            rules  => [{type, 'binary'}, {max_length, 40 }, {min_length, 1 }, true, {required, false }]
         }}
     ].
 
