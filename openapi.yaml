@@ -15,6 +15,15 @@ info:
 
     [OAS3]: https://swagger.io/specification/
 
+    ## Идентификатор запроса
+
+    При любом обращении к API в заголовке `X-Request-ID` соответствующего запроса необходимо
+    передать его уникальный идентификатор:
+
+    ```
+        X-Request-ID: 37d735d4-0f42-4f05-89fa-eaa478fb5aa9
+    ```
+
     ## Формат содержимого
 
     Любой запрос к API должен выполняться в кодировке UTF-8 и с указанием
@@ -23,6 +32,26 @@ info:
     ```
     Content-Type: application/json; charset=utf-8
     ```
+
+    ## Максимальное время обработки запроса
+
+    При любом обращении к API в заголовке `X-Request-Deadline` соответствующего запроса можно
+    передать параметр отсечки по времени, определяющий максимальное время ожидания завершения
+    операции по запросу:
+
+    ```
+        X-Request-Deadline: 10s
+    ```
+
+    По истечении указанного времени система прекращает обработку запроса. Рекомендуется указывать
+    значение не более одной минуты, но не менее трёх секунд.
+
+    `X-Request-Deadline` может:
+
+    * задаваться в формате `date-time` согласно
+        [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339);
+    * задаваться в относительных величинах: в миллисекундах (`150000ms`), секундах (`540s`) или
+        минутах (`3.5m`).
   termsOfService: https://vality.dev/
   license:
     name: Apache 2.0
@@ -77,6 +106,8 @@ paths:
       tags:
         - apiKeys
       parameters:
+        - $ref: '#/components/parameters/requestID'
+        - $ref: '#/components/parameters/deadline'
         - $ref: '#/components/parameters/partyId'
         - name: status
           description: |
@@ -135,6 +166,8 @@ paths:
       tags:
         - apiKeys
       parameters:
+        - $ref: '#/components/parameters/requestID'
+        - $ref: '#/components/parameters/deadline'
         - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
       responses:
@@ -161,6 +194,8 @@ paths:
       tags:
         - apiKeys
       parameters:
+        - $ref: '#/components/parameters/requestID'
+        - $ref: '#/components/parameters/deadline'
         - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
       requestBody:
@@ -190,6 +225,8 @@ paths:
       tags:
         - apiKeys
       parameters:
+        - $ref: '#/components/parameters/requestID'
+        - $ref: '#/components/parameters/deadline'
         - $ref: '#/components/parameters/partyId'
         - $ref: '#/components/parameters/apiKeyId'
         - $ref: '#/components/parameters/apiKeyRevokeToken'
@@ -215,6 +252,28 @@ components:
         ```
         Запросы к данному API авторизуются сессионным токеном доступа, который вы получаете в результате аутентификации в личном кабинете.
   parameters:
+    requestID:
+      name: X-Request-ID
+      in: header
+      description: Уникальный идентификатор запроса к системе
+      required: true
+      schema:
+        description: Уникальный идентификатор запроса к системе
+        type: string
+        minLength: 1
+        maxLength: 32
+        example: 30672daac16a1f3c5e770a5a09626d1f
+    deadline:
+      name: X-Request-Deadline
+      in: header
+      description: Максимальное время обработки запроса
+      required: false
+      schema:
+        description: Максимальное время обработки запроса
+        type: string
+        maxLength: 40
+        minLength: 1
+        example: 10s
     partyId:
       name: partyId
       in: path
